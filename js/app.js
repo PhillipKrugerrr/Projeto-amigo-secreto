@@ -1,32 +1,3 @@
-
-/*let minhaLista = [1, 2, 3, 3, 4];
-let minhaListaDois = [4, 5, 6];
-let novaLista = minhaLista.concat(minhaListaDois);
-
-    function fisherYates(novaLista) {
-        for (let i = novaLista.length - 1; i > 0; i--) {
-            const j = Math.trunc(Math.random() * (i + 1));
-            [novaLista[i], novaLista[j]] = [novaLista[j], novaLista[i]];
-        }
-
-     novaLista;
-
-    console.log(novaLista);
-    
-    return;
-}
-
-//fisherYates(novaLista);
-
-function removerDuplicatas(minhaLista) {
-    return [...new Set(minhaLista)];
-}
-   let novaListaDuplicada = removerDuplicatas(minhaLista);
-   console.log(novaListaDuplicada);
-*/
-
-
-
 let nomes = [];
 const temNumero = /\d/;
 function adicionar() {
