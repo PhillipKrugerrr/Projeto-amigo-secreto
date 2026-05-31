@@ -1,76 +1,75 @@
 let nomes = [];
 const temNumero = /\d/;
+
 function adicionar() {
     let novoNome = document.getElementById("nome-amigo").value;
     let amigosIncluidos = document.getElementById("lista-amigos");
 
-        if (novoNome.trim() === "") {
-            alert('Nenhum nome adicionado');
-            return;
-        } 
-        
-        if (temNumero.test(novoNome)) {
-            alert('Nao é permitido o uso de números');
-            return;
-        }  
-        
-        if (nomes.includes(novoNome)) {
-            alert("Nome já adicionado!");
-            return; 
-        } 
-            nomes.push(novoNome);
-            amigosIncluidos.innerHTML = nomes.join(" , ");
-            limpar();
-    }
-
-function sortear() {
-
-    if (nomes.length <= 4) {
-        alert("Adicione pelo menos 4 amigos!");
+    if (novoNome.trim() === "") {
+        alert('No name added');
         return;
     }
 
+    if (temNumero.test(novoNome)) {
+        alert('Numbers are not allowed');
+        return;
+    }
+
+    if (nomes.includes(novoNome)) {
+        alert("Name already added!");
+        return;
+    }
+
+    nomes.push(novoNome);
+    amigosIncluidos.innerHTML = nomes.join(" , ");
+    limpar();
+}
+
+function sortear() {
+    if (nomes.length <= 4) {
+        alert("Add at least 4 friends!");
+        return;
+    }
+
+    let doadores = [...nomes];
+    let receptores = [...nomes];
+
+    // Embaralha receptores com Fisher-Yates
+    for (let i = receptores.length - 1; i > 0; i--) {
+        let indiceAleatorio = Math.trunc(Math.random() * (i + 1));
+        let temp = receptores[i];
+        receptores[i] = receptores[indiceAleatorio];
+        receptores[indiceAleatorio] = temp;
+    }
+
+    // Garante que ninguém tira o próprio nome
+    for (let i = 0; i < doadores.length; i++) {
+        if (doadores[i] === receptores[i]) {
+            let proximo = (i + 1) % doadores.length;
+            let temp = receptores[i];
+            receptores[i] = receptores[proximo];
+            receptores[proximo] = temp;
+        }
+    }
+
+    // Exibição individual
     let listaSorteio = document.getElementById("lista-sorteio");
-    let nomesEmbaralhados = []; 
+    listaSorteio.innerHTML = "";
 
-        for (const pessoa of nomes) {
-            nomesEmbaralhados.push(pessoa);
-        }
-        for (let i = 0; i < nomesEmbaralhados.length; i++) {
-
-            let indiceAleatorio = Math.trunc(Math.random() * nomesEmbaralhados.length -1);
-
-            let temp = nomesEmbaralhados[i];
-            nomesEmbaralhados[i] = nomesEmbaralhados[indiceAleatorio];
-            nomesEmbaralhados[indiceAleatorio] = temp;
+    for (let i = 0; i < doadores.length; i++) {
+        let botao = document.createElement("button");
+        botao.textContent = `${doadores[i]}: reveal your secret friend`;
+        botao.onclick = () => {
+            alert(`${doadores[i]}, your secret friend is: ${receptores[i]}! 🎉`);
+        };
+        listaSorteio.appendChild(botao);
     }
-            let resultado = "";
-
-        for (let i = 0; i < nomesEmbaralhados.length; i++) {
-            
-            let amigoSecreto;
-
-        if (i === nomesEmbaralhados.length - 1) {
-
-            amigoSecreto = nomesEmbaralhados[0];
-
-        } else {
-
-            amigoSecreto = nomesEmbaralhados[i + 1];
-
-        }
-
-            resultado += `${nomesEmbaralhados[i]} → ${amigoSecreto}<br>`;
-    }
-
-    listaSorteio.innerHTML = resultado;
-
 }
 function reiniciar() {
     nomes = [];
     document.getElementById("lista-amigos").innerHTML = "";
     document.getElementById("lista-sorteio").innerHTML = "";
-    limpar()
+    limpar();
 }
 
 function limpar() {
@@ -78,12 +77,10 @@ function limpar() {
 }
 
 let remover = document.getElementById('lista-amigos');
-
-remover.addEventListener('click', function() {
-    
-    remover.innerHTML = '';
-
-    limpar();
+remover.addEventListener('click', function () {
+    if (confirm("Remove all names?")) {
+        nomes = [];
+        remover.innerHTML = '';
+        limpar();
+    }
 });
-
-
